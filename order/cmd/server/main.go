@@ -5,12 +5,10 @@ import (
 	"log"
 	"net"
 
-	"github.com/elmas23/ecommerce/order/internal/controller"
-	"github.com/elmas23/ecommerce/order/internal/handler"
-	"github.com/elmas23/ecommerce/order/internal/repository"
+	orderpb "github.com/elmas23/ecommerce-idl/golang/order"
+	orderHandler "github.com/elmas23/ecommerce/order/internal/handler/order"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	orderpb "github.com/elmas23/ecommerce-idl/golang/order"
 )
 
 const (
@@ -20,9 +18,7 @@ const (
 func main() {
 	ctx := context.Background()
 
-	repository := repository.NewRepository(ctx)
-	controller := controller.NewController(ctx, repository)
-	handler := handler.NewHandler(ctx, controller)
+	handler := orderHandler.NewHandler(ctx)
 
 	lis, err := net.Listen("tcp", port)
 	if err != nil {

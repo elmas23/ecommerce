@@ -37,7 +37,7 @@ type OrderModel struct {
 	gorm.Model
 	CustomerID int64
 	Status     string
-	OrderItems []OrderItemModel
+	OrderItems []OrderItemModel `gorm:"foreignKey:OrderID"`
 }
 
 // OrderItemModel is the gorm model for OrderItem
