@@ -6,6 +6,9 @@ import (
 	"github.com/elmas23/ecommerce/order/internal/entity"
 	"github.com/elmas23/ecommerce/order/internal/gateway/payment"
 	"github.com/elmas23/ecommerce/order/internal/repository/order"
+	errorlib "github.com/elmas23/ecommerce/order/internal/utils/errors"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type Controller interface {
@@ -38,7 +41,11 @@ func (c *controller) PlaceOrder(ctx context.Context, order entity.Order) (entity
 	}
 	paymentErr := c.paymentGateway.Charge(ctx, paymentOrder)
 	if paymentErr != nil {
-		return entity.Order{}, paymentErr
+		// if the payment fails, return an error with the details
+		badReq := errorlib.HandleBadRequest(paymentErr)
+		orderStatus := status.New(codes.InvalidArgument, "order creation failed")
+		statusWithDetails, _ := orderStatus.WithDetails(badReq)
+		return entity.Order{}, statusWithDetails.Err()
 	}
 	return order, nil
 }

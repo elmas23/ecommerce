@@ -21,7 +21,7 @@ type repository struct {
 }
 
 func NewRepository(ctx context.Context) *repository {
-	db, openErr := gorm.Open(mysql.Open("root:verysecretpass@tcp(127.0.0.1:3306)/payment"), &gorm.Config{})
+	db, openErr := gorm.Open(mysql.Open("root:verysecretpass@tcp(127.0.0.1:3307)/payment"), &gorm.Config{})
 	if openErr != nil {
 		panic(fmt.Errorf("error connecting to database: %v", openErr))
 	}
