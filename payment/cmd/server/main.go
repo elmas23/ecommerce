@@ -5,20 +5,20 @@ import (
 	"log"
 	"net"
 
-	orderpb "github.com/elmas23/ecommerce-idl/golang/order"
-	orderHandler "github.com/elmas23/ecommerce/order/internal/handler/order"
+	paymentpb "github.com/elmas23/ecommerce-idl/golang/payment"
+	paymentHanlder "github.com/elmas23/ecommerce/payment/internal/handler/payment"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 const (
-	port = ":3000"
+	port = ":3001"
 )
 
 func main() {
 	ctx := context.Background()
 
-	handler := orderHandler.NewHandler(ctx)
+	handler := paymentHanlder.NewHandler(ctx)
 
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
@@ -26,7 +26,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	orderpb.RegisterOrderServer(grpcServer, handler)
+	paymentpb.RegisterPaymentServer(grpcServer, handler)
 	reflection.Register(grpcServer)
 
 	log.Printf("Starting gRPC server on port %s", port)
