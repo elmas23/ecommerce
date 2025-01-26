@@ -29,7 +29,7 @@ func NewRepository(ctx context.Context) *repository {
 		panic(fmt.Errorf("db otel plugin error: %v", err))
 	}
 
-	err := db.AutoMigrate(&entity.Payment{})
+	err := db.AutoMigrate(&entity.PaymentModel{})
 	if err != nil {
 		panic(fmt.Errorf("db migration error: %v", err))
 	}
